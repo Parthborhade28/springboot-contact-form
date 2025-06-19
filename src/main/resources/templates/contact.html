@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Me</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/contact.css}">
+</head>
+<body>
+  <section class="contact-section">
+    <div class="contact-container">
+      <h2>Contact <span>Me</span></h2>
+
+      <p th:if="${successMsg}" th:text="${successMsg}" class="success-msg"></p>
+      <p th:if="${errorMsg}" th:text="${errorMsg}" class="error-msg"></p>
+
+      <form th:action="@{/contact}" method="post" th:object="${contact}" class="contact-form">
+        <div class="form-row">
+          <input type="text" th:field="*{name}" placeholder="Your Name" required />
+          <input type="email" th:field="*{email}" placeholder="Your Email" required />
+        </div>
+        <div class="form-row">
+          <input type="text" th:field="*{mobile}" placeholder="Mobile Number" required />
+          <input type="text" th:field="*{subject}" placeholder="Subject" />
+        </div>
+        <textarea th:field="*{message}" placeholder="Your Message" rows="6" required></textarea>
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </section>
+</body>
+</html>
