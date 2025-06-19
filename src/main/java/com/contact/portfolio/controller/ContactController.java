@@ -21,19 +21,27 @@ public class ContactController {
     @Autowired
     private JavaMailSender mailSender;
 
-    // 🟢 Handle GET request (open the form page)
+    // 🟢 Redirect root (/) to /contact
+    @GetMapping("/")
+    public String redirectToForm() {
+        return "redirect:/contact";
+    }
+
+    // 🟢 Show contact form
     @GetMapping("/contact")
     public String showContactForm(Model model) {
         model.addAttribute("contact", new Contact());
-        return "contact";
+        return "contact"; // will load contact.html from templates/
     }
 
     // 🟢 Handle form submission
     @PostMapping("/contact")
     public String submitContactForm(@ModelAttribute Contact contact, Model model) {
         try {
+            // Save to DB
             contactRepo.save(contact);
 
+            // Send email
             SimpleMailMessage msg = new SimpleMailMessage();
             msg.setTo("borhadeparth24@gmail.com");
             msg.setSubject("Message from " + contact.getName());
@@ -42,6 +50,7 @@ public class ContactController {
                         "Mobile: " + contact.getMobile() + "\n" +
                         "Subject: " + contact.getSubject() + "\n\n" +
                         "Message:\n" + contact.getMessage());
+
             mailSender.send(msg);
 
             model.addAttribute("successMsg", "Message sent and saved!");
